@@ -7,6 +7,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { TripService } from '../../../services/trip.service';
 import { Trip } from '../../../models/trip.model';
+import { BusService } from '../../../services/bus.service';
+import { Bus } from '../../../models/bus.model';
 import { Observable } from 'rxjs';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort, MatSortModule } from '@angular/material/sort';
@@ -24,11 +26,12 @@ import { FormsModule } from '@angular/forms';
 export class TripManagementComponent implements OnInit {
   displayedColumns = ['busId', 'departure', 'destination', 'pricing', 'dates', 'operator', 'actions'];
   dataSource = new MatTableDataSource<Trip>([]);
+  buses: Bus[] = [];
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
-  constructor(private tripService: TripService, private dialog: MatDialog) {}
+  constructor(private tripService: TripService, private dialog: MatDialog, private busService: BusService) {}
 
   ngOnInit(): void {
     this.tripService.list().subscribe(list => {
@@ -36,6 +39,13 @@ export class TripManagementComponent implements OnInit {
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
     });
+    this.busService.getBuses().subscribe(b => this.buses = b || []);
+  }
+
+  getBusName(id?: string) {
+    if (!id) return '';
+    const b = this.buses.find(x => x.id === id);
+    return b ? b.name : id;
   }
 
   applyFilter(value: string) {
@@ -63,5 +73,17 @@ export class TripManagementComponent implements OnInit {
   remove(row: Trip) {
     if (!row.id) return;
     if (confirm('Delete this trip?')) this.tripService.delete(row.id);
+  }
+
+  computeArrivalForDateString(dateIso: string, departTime: string | undefined, durationMinutes?: number) {
+    if (!dateIso) return '';
+    const [dYear, dMonth, dDay] = dateIso.split('-').map(Number);
+    const [h, m] = (departTime || '00:00').split(':').map(Number);
+    const departDate = new Date(dYear, dMonth - 1, dDay, h || 0, m || 0);
+    const totalMin = Number(durationMinutes || 0);
+    const arrival = new Date(departDate.getTime() + totalMin * 60000);
+    const hh = String(arrival.getHours()).padStart(2, '0');
+    const mm = String(arrival.getMinutes()).padStart(2, '0');
+    return `${hh}:${mm}`;
   }
 }

@@ -19,7 +19,7 @@
   <table mat-table [dataSource]="dataSource" class="mat-elevation-z2 full">
     <ng-container matColumnDef="busId">
       <th mat-header-cell *matHeaderCellDef>Bus</th>
-      <td mat-cell *matCellDef="let r">{{ r.busId }}</td>
+      <td mat-cell *matCellDef="let r">{{ getBusName(r.busId) }}</td>
     </ng-container>
 
     <ng-container matColumnDef="departure">
@@ -39,15 +39,29 @@
     <ng-container matColumnDef="pricing">
       <th mat-header-cell *matHeaderCellDef>Pricing</th>
       <td mat-cell *matCellDef="let r">
-        {{ r.pricing.adult }} / {{ r.pricing.child }}
+        <div>Adult: {{ r.pricing.adult }}</div>
+        <div>Child: {{ r.pricing.child }}</div>
       </td>
     </ng-container>
 
     <ng-container matColumnDef="dates">
       <th mat-header-cell *matHeaderCellDef>Dates</th>
       <td mat-cell *matCellDef="let r">
-        {{ r.dates?.slice(0, 3)?.join(", ") }}
-        {{ r.dates?.length > 3 ? "..." : "" }}
+        <div class="dates-list">
+          <div *ngFor="let d of r.dates" class="date-line">
+            <div class="date-item">{{ d }}</div>
+            <div class="date-times">
+              {{ r.departure.time }} →
+              {{
+                computeArrivalForDateString(
+                  d,
+                  r.departure.time,
+                  r.durationMinutes
+                )
+              }}
+            </div>
+          </div>
+        </div>
       </td>
     </ng-container>
 

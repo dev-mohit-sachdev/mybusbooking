@@ -11,6 +11,7 @@ import { MatCardModule }      from '@angular/material/card';
 import { MatIconModule }      from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-auth',
@@ -41,6 +42,7 @@ export class AuthComponent implements OnInit {
     private fb: FormBuilder,
     private userService: UserService,
     private snack: MatSnackBar
+  , private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -101,8 +103,10 @@ async onLogin() {
     if (result.user) {
       // ✅ Successful login
       this.snack.open(`Welcome ${result.user.email}!`, 'OK', { duration: 2500 });
-      // 👉 You can navigate to dashboard here
-      // this.router.navigate(['/dashboard']);
+  // persist to session storage for route guards and later use
+  sessionStorage.setItem('mybusbooking-user', JSON.stringify(result.user));
+  // navigate to search buses page
+  this.router.navigate(['/search']);
     } else {
       // ❌ Show exact error (email or password incorrect)
       this.snack.open(result.message, 'Try Again', { duration: 2500 });

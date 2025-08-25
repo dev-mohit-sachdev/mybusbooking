@@ -10,3 +10,9 @@
 .chip-text { font-size:13px; }
 .chip-time { font-weight:700; margin:0 6px; }
 .chip-remove { background:transparent; border:none; color:#0d47a1; font-weight:700; cursor:pointer; }
+
+/* Make the dialog content scroll when tall */
+.trip-dialog-card { max-width: 720px; max-height: 80vh; overflow: auto; }
+
+/* Ensure overlay/dialog pane allows scrolling */
+::ng-deep .cdk-overlay-pane { max-height: 90vh; overflow: auto; }

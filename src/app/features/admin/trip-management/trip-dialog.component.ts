@@ -15,11 +15,12 @@ import { BusService } from '../../../services/bus.service';
 import { Bus } from '../../../models/bus.model';
 import { MatCardModule } from '@angular/material/card';
 import { Trip } from '../../../models/trip.model';
+import { MultiDatePickerComponent } from '../component/multi-date-picker/multi-date-picker.component';
 
 @Component({
   selector: 'app-trip-dialog',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatIconModule, MatDatepickerModule, MatNativeDateModule, MatSelectModule, MatCardModule, MatDialogModule],
+  imports: [CommonModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatIconModule, MatDatepickerModule, MatNativeDateModule, MatSelectModule, MatCardModule, MatDialogModule,MultiDatePickerComponent],
   templateUrl: './trip-dialog.component.html',
   styleUrls: ['./trip-dialog.component.scss']
 })
@@ -43,8 +44,8 @@ export class TripDialogComponent {
       departureTime: ['', Validators.required],
       destinationName: ['', Validators.required],
       // duration that will be applied to every selected date
-      durationHours: [0, [Validators.min(0)]],
-      durationMinutes: [0, [Validators.min(0), Validators.max(59)]],
+  durationHours: [0, [Validators.min(0)]],
+  durationMinutes: [0, [Validators.min(0), Validators.max(59)]],
       adult: [0, [Validators.required, Validators.min(0)]],
       child: [0, [Validators.required, Validators.min(0)]],
       dates: ['', Validators.required],
@@ -57,6 +58,19 @@ export class TripDialogComponent {
 
   // selectedDates stores objects: { date: 'YYYY-MM-DD', departTime: 'HH:mm', arriveTime: 'HH:mm' }
   selectedDates: Array<{ date: string; departTime: string; arriveTime: string }> = [];
+
+  // Called when the multi-date-picker emits new dates
+  onDatesChange(dates: Date[]) {
+    const depart = this.form.get('departureTime')?.value || '00:00';
+    const hours = Number(this.form.get('durationHours')?.value || 0);
+    const mins = Number(this.form.get('durationMinutes')?.value || 0);
+    this.selectedDates = (dates || []).map((date: Date) => {
+      const iso = date.toISOString().slice(0, 10);
+      const arrive = this.computeArrivalForDateString(iso, depart, hours, mins);
+      return { date: iso, departTime: depart, arriveTime: arrive };
+    });
+    this.form.get('dates')!.setValue(this.selectedDates.map((s) => s.date).join(', '));
+  }
 
   // load buses for dropdown
 
@@ -83,6 +97,14 @@ export class TripDialogComponent {
       return { date: ds, departTime: depart, arriveTime: arrive };
     });
     this.form.get('dates')!.setValue(this.selectedDates.map(s => s.date).join(', '));
+    // populate duration fields if trip has durationMinutes
+    if ((trip as any).durationMinutes !== undefined) {
+      const total = Number((trip as any).durationMinutes) || 0;
+      const h = Math.floor(total / 60);
+      const m = total % 60;
+      this.form.get('durationHours')!.setValue(h);
+      this.form.get('durationMinutes')!.setValue(m);
+    }
   if (this.mode === 'view') this.form.disable();
   }
 
@@ -90,25 +112,25 @@ export class TripDialogComponent {
     this.busService.getBuses().subscribe(b => this.buses = b || []);
   }
 
-  async openMultiDatePicker() {
-    // dynamically import the dialog component so the compiler doesn't complain about unused entry
-    import('./multi-date-picker-dialog.component').then(m => {
-      const dr = this.dialog.open(m.MultiDatePickerDialogComponent);
-      dr.afterClosed().subscribe((res: string[] | null) => {
-      if (!res || !Array.isArray(res) || !res.length) return;
-      const depart = this.form.get('departureTime')?.value || '00:00';
-      const hours = Number(this.form.get('durationHours')?.value || 0);
-      const mins = Number(this.form.get('durationMinutes')?.value || 0);
-      for (const iso of res) {
-        if (!this.selectedDates.find(s => s.date === iso)) {
-          const arrive = this.computeArrivalForDateString(iso, depart, hours, mins);
-          this.selectedDates.push({ date: iso, departTime: depart, arriveTime: arrive });
-        }
-      }
-      this.form.get('dates')!.setValue(this.selectedDates.map(s => s.date).join(', '));
-      });
-    });
-  }
+//   async openMultiDatePicker() {
+//     // dynamically import the dialog component so the compiler doesn't complain about unused entry
+//     import('./multi-date-picker-dialog.component').then(m => {
+//       const dr = this.dialog.open(m.MultiDatePickerDialogComponent);
+//       dr.afterClosed().subscribe((res: string[] | null) => {
+//       if (!res || !Array.isArray(res) || !res.length) return;
+//       const depart = this.form.get('departureTime')?.value || '00:00';
+//       const hours = Number(this.form.get('durationHours')?.value || 0);
+//       const mins = Number(this.form.get('durationMinutes')?.value || 0);
+//       for (const iso of res) {
+//         if (!this.selectedDates.find(s => s.date === iso)) {
+//           const arrive = this.computeArrivalForDateString(iso, depart, hours, mins);
+//           this.selectedDates.push({ date: iso, departTime: depart, arriveTime: arrive });
+//         }
+//       }
+//       this.form.get('dates')!.setValue(this.selectedDates.map(s => s.date).join(', '));
+//       });
+//     });
+//   }
 
   addDate(d: any, inputEl?: any) {
     if (!d) return;
@@ -132,13 +154,6 @@ export class TripDialogComponent {
     try { if (inputEl) inputEl.value = ''; } catch(_) {}
   }
 
-  onAddClicked(dateInput: any, picker: any) {
-    // if input has no value, open the picker UI
-  const val = dateInput?.value;
-  if (!val) { picker.open(); return; }
-  this.addDate(val);
-  }
-
   removeDate(date: string) {
     this.selectedDates = this.selectedDates.filter(d => d.date !== date);
     this.form.get('dates')!.setValue(this.selectedDates.map(s => s.date).join(', '));
@@ -150,10 +165,13 @@ export class TripDialogComponent {
       const payload: Trip = {
         busId: v.busId || '',
         departure: { name: v.departureName || '', time: v.departureTime || '' },
+        // do not auto-calculate destination.time inside the popup; keep it empty so table computes per-date arrivals
         destination: { name: v.destinationName || '', time: '' },
         pricing: { adult: Number(v.adult) || 0, child: Number(v.child) || 0 },
-  dates: this.selectedDates.map(s => s.date),
-        operator: v.operator || ''
+        dates: this.selectedDates.map(s => s.date),
+        operator: v.operator || '',
+        // persist total journey duration in minutes
+        durationMinutes: (Number(v.durationHours || 0) * 60) + Number(v.durationMinutes || 0)
       };
       this.dialogRef.close(payload);
     }

@@ -6,12 +6,18 @@
 
   <span class="spacer"></span>
 
-  <div class="header-right" *ngIf="isLoggedIn; else loggedOut">
-    <span class="user-email">{{ userEmail }}</span>
-    <button mat-button color="accent">Logout</button>
+  <div class="header-right">
+    <a mat-button routerLink="/search" *ngIf="!isAdmin">Search Buses</a>
+    <a mat-button routerLink="/admin/dashboard" *ngIf="isAdmin"
+      >Admin Dashboard</a
+    >
+    <span class="spacer-small"></span>
+    <ng-container *ngIf="isLoggedIn; else loggedOut">
+      <span class="user-email">{{ userEmail }}</span>
+      <button mat-button color="accent" (click)="logout()">Logout</button>
+    </ng-container>
+    <ng-template #loggedOut>
+      <button mat-button color="accent" routerLink="/">Login</button>
+    </ng-template>
   </div>
-
-  <ng-template #loggedOut>
-    <button mat-button color="accent">Login</button>
-  </ng-template>
 </mat-toolbar>

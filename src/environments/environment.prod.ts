@@ -9,3 +9,7 @@ export const environment = {
     appId: window['env'].FIREBASE_APP_ID
   }
 };
+
+export const razorpayConfig = {
+  key: window['env'].RAZORPAY_KEY
+};

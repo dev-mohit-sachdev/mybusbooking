@@ -22,12 +22,12 @@
       align-items: center;
       gap: 8px;
       .bus-main-icon {
-        font-size: 28px;
-        color: #1976d2;
-        background: #e3f2fd;
-        border-radius: 50%;
-        padding: 6px;
-        box-shadow: 0 1px 4px rgba(25, 118, 210, 0.08);
+  font-size: 34px;
+  color: #fff;
+  background: #1976d2;
+  border-radius: 8px;
+  padding: 8px;
+  box-shadow: 0 4px 12px rgba(25, 118, 210, 0.12);
       }
       .bus-title {
         font-weight: 700;
@@ -85,8 +85,8 @@
         color: #1976d2;
         box-shadow: 0 1px 4px rgba(25, 118, 210, 0.04);
         .seat-icon {
-          font-size: 16px;
-          color: #1976d2;
+          font-size: 18px;
+          color: #0d47a1;
         }
       }
     }

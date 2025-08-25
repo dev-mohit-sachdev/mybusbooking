@@ -1,5 +1,6 @@
 // sidebar.component.ts
 import { Component, HostListener } from '@angular/core';
+import { Router } from '@angular/router';
 import { RouterModule } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
@@ -25,6 +26,8 @@ export class SidebarComponent {
     { path: '/admin/user-management', label: 'User Management', icon: 'group' }
   ];
 
+  constructor(private router: Router) {}
+
   @HostListener('window:resize')
   onResize() {
     this.isSidebarOpen = window.innerWidth >= 768;
@@ -35,6 +38,7 @@ export class SidebarComponent {
   }
 
   onLogout() {
-    // Place logout logic here
+  sessionStorage.removeItem('mybusbooking-admin');
+  this.router.navigate(['/admin/login']);
   }
 }

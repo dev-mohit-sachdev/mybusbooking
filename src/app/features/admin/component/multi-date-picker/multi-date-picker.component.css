@@ -1,0 +1,31 @@
+.mat-form-field {
+  width: 100%;
+}
+/* simple styling for the inline multi-date picker */
+:host {
+  display: block;
+}
+input[matInput] {
+  cursor: pointer;
+}
+.multi-selected .mat-calendar-body-cell-content {
+  background: #1976d2;
+  color: white;
+  border-radius: 50%;
+}
+/* make the popup/card scrollable when tall */
+.mat-card {
+  max-height: 60vh;
+  overflow: auto;
+}
+.mat-calendar {
+  max-height: 52vh;
+  overflow: auto;
+}
+
+/* ensure dialog container allows scrolling */
+.cdk-global-overlay-wrapper,
+.cdk-overlay-pane {
+  max-height: 90vh;
+  overflow: auto;
+}

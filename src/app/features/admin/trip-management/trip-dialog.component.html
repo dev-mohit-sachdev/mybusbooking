@@ -1,13 +1,14 @@
 <mat-card class="trip-dialog-card">
   <mat-card-content>
     <form [formGroup]="form">
+      <!-- Bus & Operator -->
       <div class="row">
         <mat-form-field appearance="outline" class="flex">
           <mat-label>Bus</mat-label>
           <mat-select formControlName="busId">
-            <mat-option *ngFor="let b of buses" [value]="b.id">{{
-              b.name || b.id
-            }}</mat-option>
+            <mat-option *ngFor="let b of buses" [value]="b.id">
+              {{ b.name || b.id }}
+            </mat-option>
           </mat-select>
         </mat-form-field>
         <mat-form-field appearance="outline" class="flex">
@@ -16,6 +17,7 @@
         </mat-form-field>
       </div>
 
+      <!-- Departure -->
       <div class="row">
         <mat-form-field appearance="outline" class="flex">
           <mat-label>Departure Name</mat-label>
@@ -27,6 +29,7 @@
         </mat-form-field>
       </div>
 
+      <!-- Destination & Duration -->
       <div class="row">
         <mat-form-field appearance="outline" class="flex">
           <mat-label>Destination Name</mat-label>
@@ -55,6 +58,7 @@
         </div>
       </div>
 
+      <!-- Prices -->
       <div class="row">
         <mat-form-field appearance="outline" class="flex">
           <mat-label>Adult Price</mat-label>
@@ -66,26 +70,15 @@
         </mat-form-field>
       </div>
 
+      <!-- Multi Date Picker -->
       <div class="dates-row full">
-        <mat-form-field appearance="outline" class="flex">
-          <mat-label>Add date</mat-label>
-          <input
-            matInput
-            [matDatepicker]="picker"
-            #dateInput
-            (dateChange)="addDate($event.value, dateInput); picker.open()"
-          />
-          <mat-datepicker-toggle
-            matSuffix
-            [for]="picker"
-          ></mat-datepicker-toggle>
-          <mat-datepicker #picker></mat-datepicker>
-        </mat-form-field>
-        <button mat-stroked-button color="primary" (click)="picker.open()">
-          Add
-        </button>
+        <app-multi-date-picker
+          [disabled]="mode === 'view'"
+          (datesChange)="onDatesChange($event)"
+        ></app-multi-date-picker>
       </div>
 
+      <!-- Selected Dates Chips -->
       <div class="chip-list full" aria-label="Selected dates">
         <span class="chip" *ngFor="let d of selectedDates">
           <div class="chip-text">
@@ -102,9 +95,12 @@
       </div>
     </form>
   </mat-card-content>
+
+  <!-- Actions -->
   <mat-card-actions align="end">
     <button mat-button (click)="close()">Cancel</button>
     <button
+      *ngIf="mode !== 'view'"
       mat-raised-button
       color="primary"
       (click)="save()"

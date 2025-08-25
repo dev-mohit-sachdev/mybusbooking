@@ -170,6 +170,39 @@ export class BusService {
     return { status: 200, message: 'Seat updated' };
   }
 
+  async markSeatBooked(busId: string, seatNo: number, dateIso: string, bookedBy?: string | null) {
+    const ref = doc(this.firestore, `buses/${busId}`);
+    const snap = await getDoc(ref);
+    if (!snap.exists()) throw new Error('Bus not found');
+    const bus = snap.data() as Bus;
+
+    const findAndMark = (arr?: import('../models/bus.model').Seat[]) => {
+      if (!arr) return false;
+      for (let i = 0; i < arr.length; i++) {
+        if (arr[i].seatNo === seatNo) {
+          const s = arr[i];
+          const dates = Array.isArray((s as any).bookedDates) ? (s as any).bookedDates.slice() : [];
+          if (!dates.includes(dateIso)) dates.push(dateIso);
+          (s as any).bookedDates = dates;
+          if (bookedBy !== undefined) (s as any).bookedBy = bookedBy;
+          arr[i] = s;
+          return true;
+        }
+      }
+      return false;
+    };
+
+    let updated = false;
+    updated = updated || findAndMark(bus.sitting?.left?.seats);
+    updated = updated || findAndMark(bus.sitting?.right?.seats);
+    updated = updated || findAndMark(bus.sleeper?.seats);
+
+    if (!updated) throw new Error('Seat not found');
+
+    await updateDoc(ref, { ...bus });
+    return { status: 200, message: 'Seat marked booked for date' };
+  }
+
   // Check if a user can book a specific seat based on reservation metadata
   async canUserBookSeat(busId: string, seatNo: number, user: { gender: 'male' | 'female'; age: number }) {
     const ref = doc(this.firestore, `buses/${busId}`);

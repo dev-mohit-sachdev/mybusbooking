@@ -9,3 +9,6 @@ export const environment = {
 },
   production: false
 };
+export const razorpayConfig = {
+  key: 'rzp_test_L5xt4eSGmwgh6B'
+};

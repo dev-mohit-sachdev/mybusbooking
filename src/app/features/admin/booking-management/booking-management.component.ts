@@ -34,8 +34,7 @@ export class BookingManagementComponent implements OnInit {
         this.message = `Cannot book: ${res.reason}`;
         return;
       }
-      // mark seat bookedBy = 'admin-test'
-      await this.busService.updateSeatMetadata(busId, seatNo, { bookedBy: 'admin-test' });
+  await this.busService.updateSeatMetadata(busId, seatNo, { bookedBy: 'admin-test' });
       this.message = 'Seat booked (admin-test)';
     } catch (err: any) {
       this.message = err?.message || String(err);

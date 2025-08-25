@@ -8,9 +8,6 @@
 # Angular cache
 /.angular/cache/
 
-# Environment files (sensitive)
-src/environments/environment*.ts
-
 # IDE / editor files
 .vscode/
 .idea/

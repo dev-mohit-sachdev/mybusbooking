@@ -1,0 +1,48 @@
+<!-- sidebar.component.html -->
+<div class="sidebar" [class.closed]="!isSidebarOpen">
+  <!-- Header -->
+  <div class="sidebar-header">
+    <div class="logo-group">
+      <mat-icon class="logo-icon">directions_bus</mat-icon>
+      <span class="title" *ngIf="isSidebarOpen">Bus Admin</span>
+    </div>
+    <button
+      mat-icon-button
+      class="toggle-btn"
+      (click)="toggleSidebar()"
+      [matTooltip]="isSidebarOpen ? 'Close' : 'Open'"
+      matTooltipPosition="right"
+    >
+      <mat-icon>{{ isSidebarOpen ? "chevron_left" : "menu" }}</mat-icon>
+    </button>
+  </div>
+
+  <!-- Navigation Items -->
+  <nav class="nav-links">
+    <a
+      mat-button
+      *ngFor="let item of navItems"
+      [routerLink]="item.path"
+      routerLinkActive="active"
+      [matTooltip]="!isSidebarOpen ? item.label : ''"
+      matTooltipPosition="right"
+    >
+      <mat-icon>{{ item.icon }}</mat-icon>
+      <span class="label" *ngIf="isSidebarOpen">{{ item.label }}</span>
+    </a>
+  </nav>
+
+  <!-- Footer Logout -->
+  <div class="sidebar-footer">
+    <button
+      mat-button
+      color="warn"
+      (click)="onLogout()"
+      [matTooltip]="!isSidebarOpen ? 'Logout' : ''"
+      matTooltipPosition="right"
+    >
+      <mat-icon>logout</mat-icon>
+      <span class="label" *ngIf="isSidebarOpen">Logout</span>
+    </button>
+  </div>
+</div>

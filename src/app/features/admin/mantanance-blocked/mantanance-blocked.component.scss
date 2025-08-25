@@ -1,0 +1,19 @@
+:host {
+	display: block;
+	padding: 16px;
+}
+
+.mb-header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	margin-bottom: 12px;
+}
+
+table {
+	width: 100%;
+}
+
+th.mat-header-cell {
+	text-transform: uppercase;
+}

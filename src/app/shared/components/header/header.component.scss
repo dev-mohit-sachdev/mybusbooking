@@ -1,0 +1,33 @@
+.header-toolbar {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 16px;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+
+  .logo-icon {
+    margin-right: 8px;
+  }
+
+  .website-name {
+    font-size: 20px;
+    font-weight: bold;
+  }
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  .user-email {
+    font-size: 14px;
+  }
+}

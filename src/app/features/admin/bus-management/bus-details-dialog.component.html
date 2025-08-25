@@ -1,0 +1,149 @@
+<mat-card class="bus-details-card">
+  <div class="dialog-header">
+    <span class="dialog-title">{{ data.name }}</span>
+    <button
+      mat-icon-button
+      class="close-btn"
+      (click)="close()"
+      aria-label="Close"
+    >
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+  <mat-card-content *ngIf="mode === 'view'">
+    <div class="bus-info">
+      <div>
+        <strong>Sitting Seats:</strong>
+        {{ data.sitting.left.total + data.sitting.right.total }}
+      </div>
+      <div *ngIf="hasSleeper">
+        <strong>Sleeper Seats:</strong> {{ data.sleeper.total }}
+      </div>
+    </div>
+    <div class="view-options">
+      <mat-radio-group [(ngModel)]="viewType">
+        <mat-radio-button value="sitting">Sitting</mat-radio-button>
+        <mat-radio-button value="sleeper" *ngIf="hasSleeper"
+          >Sleeper</mat-radio-button
+        >
+      </mat-radio-group>
+    </div>
+    <div class="seat-layout" *ngIf="viewType === 'sitting'">
+      <div class="bus-shell">
+        <div class="driver">Driver</div>
+        <div class="seats-area">
+          <div
+            class="row"
+            *ngFor="
+              let _ of range(getSittingDisplayRowCount(data));
+              let i = index
+            "
+          >
+            <div class="left-block">
+              <ng-container *ngIf="sittingDisplayLeftRows(data)[i]">
+                <div
+                  class="seat seat-box"
+                  *ngFor="let s of sittingDisplayLeftRows(data)[i]"
+                  [title]="'L' + s.seatNo"
+                  [class.blocked]="s.blocked || s.reservedFor === 'maintenance'"
+                  [class.female]="s.reservedFor === 'female'"
+                >
+                  <div class="label">L</div>
+                  <div class="seat-num">{{ s.seatNo }}</div>
+                </div>
+              </ng-container>
+            </div>
+            <div class="aisle"></div>
+            <div class="right-block">
+              <ng-container *ngIf="sittingDisplayRightRows(data)[i]">
+                <div
+                  class="seat seat-box"
+                  *ngFor="let s of sittingDisplayRightRows(data)[i]"
+                  [title]="'R' + s.seatNo"
+                  [class.blocked]="s.blocked || s.reservedFor === 'maintenance'"
+                  [class.female]="s.reservedFor === 'female'"
+                >
+                  <div class="label">R</div>
+                  <div class="seat-num">{{ s.seatNo }}</div>
+                </div>
+              </ng-container>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="seat-layout" *ngIf="viewType === 'sleeper' && hasSleeper">
+      <div class="bus-shell">
+        <div class="driver">SL / SR</div>
+        <div class="seats-area">
+          <div
+            class="row"
+            *ngFor="
+              let _ of range(getSleeperDisplayRowCount(data));
+              let i = index
+            "
+          >
+            <div class="left-block">
+              <ng-container *ngIf="sleeperDisplayLeftRows(data)[i]">
+                <div
+                  class="seat sleeper-box"
+                  *ngFor="let s of sleeperDisplayLeftRows(data)[i]"
+                  [title]="'SL' + s.seatNo"
+                  [class.blocked]="s.blocked || s.reservedFor === 'maintenance'"
+                  [class.female]="s.reservedFor === 'female'"
+                >
+                  <div class="label">SL</div>
+                  <div class="seat-num">{{ s.seatNo }}</div>
+                </div>
+              </ng-container>
+            </div>
+            <div class="aisle"></div>
+            <div class="right-block">
+              <ng-container *ngIf="sleeperDisplayRightRows(data)[i]">
+                <div
+                  class="seat sleeper-box"
+                  *ngFor="let s of sleeperDisplayRightRows(data)[i]"
+                  [title]="'SR' + s.seatNo"
+                  [class.blocked]="s.blocked || s.reservedFor === 'maintenance'"
+                  [class.female]="s.reservedFor === 'female'"
+                >
+                  <div class="label">SR</div>
+                  <div class="seat-num">{{ s.seatNo }}</div>
+                </div>
+              </ng-container>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </mat-card-content>
+
+  <mat-card-content *ngIf="mode === 'edit'">
+    <form [formGroup]="editForm" (ngSubmit)="saveEdit()">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Bus Name</mat-label>
+        <input matInput formControlName="name" required />
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Total Sitting Seats</mat-label>
+        <input matInput type="number" formControlName="totalSitting" required />
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Total Sleeper Seats</mat-label>
+        <input matInput type="number" formControlName="sleeperTotal" />
+      </mat-form-field>
+      <div class="actions">
+        <button
+          mat-raised-button
+          color="primary"
+          type="submit"
+          [disabled]="!editForm.valid"
+        >
+          Save
+        </button>
+        <button mat-button type="button" (click)="mode = 'view'">Cancel</button>
+      </div>
+    </form>
+  </mat-card-content>
+</mat-card>

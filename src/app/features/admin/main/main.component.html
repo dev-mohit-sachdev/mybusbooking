@@ -1,0 +1,8 @@
+<div class="admin-layout">
+  <!-- Show sidebar only if not on login page -->
+  <app-sidebar *ngIf="!isLoginPage"></app-sidebar>
+
+  <div class="admin-content">
+    <router-outlet></router-outlet>
+  </div>
+</div>

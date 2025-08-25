@@ -1,0 +1,24 @@
+<footer class="footer-container">
+  <div class="footer-logo">
+    <mat-icon>directions_bus</mat-icon>
+    <span class="site-name">MyBusBooking</span>
+  </div>
+
+  <nav class="footer-links">
+    <a mat-button routerLink="/book">Book Bus</a>
+    <a mat-button routerLink="/about">About Us</a>
+    <a mat-button routerLink="/contact">Contact</a>
+    <ng-container *ngIf="!isLoggedIn">
+      <a mat-button routerLink="/register">Register</a>
+      <a mat-button routerLink="/login">Login</a>
+    </ng-container>
+    <ng-container *ngIf="isLoggedIn">
+      <a mat-button routerLink="/account">My Account</a>
+      <a mat-button routerLink="/logout">Logout</a>
+    </ng-container>
+  </nav>
+
+  <div class="footer-bottom">
+    <span>&copy; {{ currentYear }} MyBusBooking. All rights reserved.</span>
+  </div>
+</footer>

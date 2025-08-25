@@ -1,0 +1,12 @@
+.trip-dialog-card { max-width: 720px; }
+.row { display:flex; gap: 12px; margin-bottom: 12px; }
+.flex { flex: 1; }
+.full { width: 100%; }
+
+.dates-row { display:flex; gap: 8px; align-items: center; margin-bottom: 8px; }
+.mat-chip-list { margin-top: 6px; }
+.chip-list { display:flex; gap:8px; flex-wrap:wrap; margin-top:6px; }
+.chip { background:#e3f2fd; color:#0d47a1; padding:6px 10px; border-radius:16px; display:inline-flex; align-items:center; gap:8px; }
+.chip-text { font-size:13px; }
+.chip-time { font-weight:700; margin:0 6px; }
+.chip-remove { background:transparent; border:none; color:#0d47a1; font-weight:700; cursor:pointer; }

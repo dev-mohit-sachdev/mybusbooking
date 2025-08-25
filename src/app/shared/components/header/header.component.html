@@ -1,0 +1,17 @@
+<mat-toolbar color="primary" class="header-toolbar">
+  <div class="header-left">
+    <mat-icon class="logo-icon">directions_bus</mat-icon>
+    <span class="website-name">MyBusBooking</span>
+  </div>
+
+  <span class="spacer"></span>
+
+  <div class="header-right" *ngIf="isLoggedIn; else loggedOut">
+    <span class="user-email">{{ userEmail }}</span>
+    <button mat-button color="accent">Logout</button>
+  </div>
+
+  <ng-template #loggedOut>
+    <button mat-button color="accent">Login</button>
+  </ng-template>
+</mat-toolbar>

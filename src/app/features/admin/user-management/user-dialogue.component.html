@@ -1,0 +1,41 @@
+<h2 mat-dialog-title>{{ isEdit ? "Edit User" : "Create User" }}</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="form" class="dialog-form">
+    <!-- Email -->
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Email</mat-label>
+      <input matInput formControlName="email" type="email" />
+      <mat-error *ngIf="form.get('email')?.hasError('required')"
+        >Email is required</mat-error
+      >
+      <mat-error *ngIf="form.get('email')?.hasError('email')"
+        >Invalid email</mat-error
+      >
+    </mat-form-field>
+
+    <!-- Password -->
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Password</mat-label>
+      <input
+        matInput
+        formControlName="password"
+        type="password"
+        placeholder="{{ isEdit ? 'Leave blank to keep unchanged' : '' }}"
+      />
+      <mat-error *ngIf="form.get('password')?.hasError('required')"
+        >Password is required</mat-error
+      >
+      <mat-error *ngIf="form.get('password')?.hasError('minlength')"
+        >Min 6 characters</mat-error
+      >
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-stroked-button color="warn" (click)="close()">Cancel</button>
+  <button mat-raised-button color="primary" (click)="save()">
+    {{ isEdit ? "Update" : "Create" }}
+  </button>
+</mat-dialog-actions>

@@ -1,0 +1,142 @@
+:host {
+  display: block;
+  padding: 16px;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 20px;
+
+  h2 {
+    margin: 0;
+  }
+
+  .header-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .search-field {
+    width: 250px;
+    min-width: 150px;
+  }
+}
+
+// Attractive bus card layout
+
+.bus-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+  padding: 8px 0;
+  justify-content: start;
+}
+
+.left-align {
+  justify-content: start;
+}
+
+.bus-card {
+  border-radius: 16px;
+  box-shadow: 0 2px 12px rgba(25, 118, 210, 0.10), 0 1.5px 6px rgba(0,0,0,0.06);
+  transition: box-shadow 0.2s, transform 0.2s;
+  background: #fff;
+  padding: 0;
+  cursor: pointer;
+  min-width: 0;
+  max-width: 350px;
+  margin: auto;
+  &:hover {
+    box-shadow: 0 4px 24px rgba(25, 118, 210, 0.18), 0 3px 12px rgba(0,0,0,0.10);
+    transform: translateY(-2px) scale(1.02);
+  }
+
+  mat-card-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 18px 18px 0 18px;
+    mat-icon {
+      font-size: 40px;
+      color: #1976d2;
+      background: #e3f2fd;
+      border-radius: 50%;
+      padding: 8px;
+      box-shadow: 0 1px 4px rgba(25, 118, 210, 0.08);
+    }
+    mat-card-title {
+      font-weight: 700;
+      font-size: 1.25rem;
+      color: #0d47a1;
+      letter-spacing: 0.5px;
+    }
+  }
+
+  mat-card-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 18px;
+    .bus-info {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 18px;
+      font-size: 1.1rem;
+      color: #333;
+      margin-top: 8px;
+      margin-bottom: 8px;
+      div {
+        background: #e3f2fd;
+        border-radius: 8px;
+        padding: 8px 16px;
+        font-weight: 600;
+        color: #1976d2;
+        box-shadow: 0 1px 4px rgba(25, 118, 210, 0.06);
+      }
+    }
+  }
+}
+
+.form-row {
+  display: flex;
+  gap: 12px;
+  margin-top: 12px;
+
+  .half-width {
+    flex: 1;
+  }
+}
+
+.full-width {
+  width: 100%;
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+  .header {
+    flex-direction: column;
+    align-items: stretch;
+
+    .header-actions {
+      justify-content: space-between;
+      width: 100%;
+
+      button {
+        flex: 1 1 auto;
+      }
+
+      .search-field {
+        flex: 1 1 auto;
+        min-width: unset;
+      }
+    }
+  }
+}

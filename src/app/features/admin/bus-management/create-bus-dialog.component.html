@@ -1,0 +1,63 @@
+<h2 mat-dialog-title>Create Bus</h2>
+<form [formGroup]="busForm" (ngSubmit)="onSubmit()" class="bus-form">
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>Bus Name</mat-label>
+    <input matInput formControlName="name" required />
+    <mat-error *ngIf="busForm.get('name')?.hasError('required')"
+      >Name is required</mat-error
+    >
+  </mat-form-field>
+
+  <div class="row">
+    <mat-form-field appearance="outline">
+      <mat-label>Total Sitting Seats</mat-label>
+      <input matInput type="number" formControlName="totalSitting" required />
+      <mat-error *ngIf="busForm.get('totalSitting')?.hasError('required')"
+        >Required</mat-error
+      >
+      <mat-error *ngIf="busForm.get('totalSitting')?.hasError('max')"
+        >Max 40 seats allowed</mat-error
+      >
+    </mat-form-field>
+    <div class="split-info">
+      <span
+        >Right: <strong>{{ sittingSplit.right }}</strong></span
+      >
+      <span
+        >Left: <strong>{{ sittingSplit.left }}</strong></span
+      >
+    </div>
+  </div>
+
+  <div class="row">
+    <mat-form-field appearance="outline">
+      <mat-label>Total Sleeper Seats</mat-label>
+      <input matInput type="number" formControlName="sleeperTotal" required />
+      <mat-error *ngIf="busForm.get('sleeperTotal')?.hasError('max')"
+        >Max 20 seats allowed</mat-error
+      >
+    </mat-form-field>
+    <div class="split-info">
+      <span
+        >Right: <strong>{{ sleeperSplit.right }}</strong></span
+      >
+      <span
+        >Left: <strong>{{ sleeperSplit.left }}</strong></span
+      >
+    </div>
+  </div>
+
+  <!-- Remaining seats summary removed, as split is now shown above -->
+
+  <div class="actions">
+    <button
+      mat-raised-button
+      color="primary"
+      type="submit"
+      [disabled]="!busForm.valid"
+    >
+      Create
+    </button>
+    <button mat-button type="button" (click)="onCancel()">Cancel</button>
+  </div>
+</form>

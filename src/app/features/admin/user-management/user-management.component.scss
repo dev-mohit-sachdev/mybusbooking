@@ -1,0 +1,30 @@
+.user-management {
+  padding: 20px;
+
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+
+    h2 {
+      margin: 0;
+    }
+  }
+
+  .table-container {
+    overflow-x: auto;
+  }
+
+  table {
+    width: 100%;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .no-users {
+    text-align: center;
+    margin-top: 20px;
+    color: gray;
+  }
+}

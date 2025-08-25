@@ -1,0 +1,9 @@
+/* empty */
+.trip-shell { padding: 18px; }
+.header { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:12px; }
+.controls { display:flex; gap:12px; align-items:center; }
+.full { width:100%; }
+table.full { width: 100%; border-radius: 8px; overflow: hidden; }
+th.mat-header-cell { background: #f5f7fb; font-weight:700; }
+td.mat-cell { padding: 12px 8px; }
+

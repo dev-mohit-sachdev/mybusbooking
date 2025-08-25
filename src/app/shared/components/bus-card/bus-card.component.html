@@ -1,0 +1,41 @@
+<mat-card class="bus-card">
+  <div class="card-header">
+    <span class="icon-title">
+      <mat-icon class="bus-main-icon">directions_bus</mat-icon>
+      <span class="bus-title">{{ bus.name }}</span>
+    </span>
+    <span class="card-actions">
+      <button
+        mat-icon-button
+        aria-label="View"
+        (click)="$event.stopPropagation(); view.emit(bus)"
+      >
+        <mat-icon class="view-icon">visibility</mat-icon>
+      </button>
+      <button
+        mat-icon-button
+        aria-label="Edit"
+        (click)="$event.stopPropagation(); edit.emit(bus)"
+      >
+        <mat-icon class="edit-icon">edit</mat-icon>
+      </button>
+    </span>
+  </div>
+  <mat-card-content>
+    <div class="bus-info">
+      <div class="seat-pill">
+        <mat-icon class="seat-icon">event_seat</mat-icon>
+        <span
+          >Sitting:
+          {{
+            (bus.sitting.left.total || 0) + (bus.sitting.right.total || 0)
+          }}</span
+        >
+      </div>
+      <div class="seat-pill">
+        <mat-icon class="seat-icon">hotel</mat-icon>
+        <span>Sleeper: {{ bus.sleeper.total || 0 }}</span>
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>

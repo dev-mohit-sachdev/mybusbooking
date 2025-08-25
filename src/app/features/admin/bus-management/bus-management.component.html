@@ -1,0 +1,36 @@
+<div class="header">
+  <h2>Bus Management</h2>
+  <div class="header-actions">
+    <button mat-flat-button color="primary" (click)="openCreate()">
+      <mat-icon>add</mat-icon>
+      Create Layout
+    </button>
+
+    <mat-form-field appearance="outline" class="search-field">
+      <mat-label>Search Bus</mat-label>
+      <input
+        matInput
+        [formControl]="searchControl"
+        placeholder="Enter bus name..."
+      />
+      <button
+        *ngIf="searchControl.value"
+        matSuffix
+        mat-icon-button
+        aria-label="Clear"
+        (click)="searchControl.setValue('')"
+      >
+        <mat-icon>close</mat-icon>
+      </button>
+    </mat-form-field>
+  </div>
+</div>
+
+<div class="bus-list left-align">
+  <app-bus-card
+    *ngFor="let bus of filteredBuses$ | async"
+    [bus]="bus"
+    (view)="openBusDetails(bus)"
+    (edit)="openEditBus(bus)"
+  ></app-bus-card>
+</div>

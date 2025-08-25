@@ -1,0 +1,141 @@
+<div class="auth-container">
+  <!-- LEFT: Branding -->
+  <section class="auth-left">
+    <div class="brand-card">
+      <div class="brand-row">
+        <div class="logo-circle">
+          <mat-icon class="bus-icon">directions_bus</mat-icon>
+        </div>
+        <h1 class="title">MyBusBooking</h1>
+      </div>
+      <p class="tagline">Book your journey with comfort and ease.</p>
+    </div>
+  </section>
+
+  <!-- RIGHT: Forms -->
+  <section class="auth-right">
+    <mat-card class="card">
+      <h2 *ngIf="!isLoginMode">Create Account</h2>
+      <h2 *ngIf="isLoginMode">Login</h2>
+
+      <!-- SIGNUP FORM -->
+      <form
+        *ngIf="!isLoginMode"
+        [formGroup]="signupForm"
+        (ngSubmit)="onSignup()"
+      >
+        <mat-form-field appearance="outline" class="full">
+          <mat-label>Email</mat-label>
+          <input
+            matInput
+            type="email"
+            formControlName="email"
+            placeholder="you@example.com"
+          />
+          <mat-error *ngIf="signupForm.get('email')?.hasError('required')"
+            >Email is required</mat-error
+          >
+          <mat-error *ngIf="signupForm.get('email')?.hasError('email')"
+            >Enter a valid email address</mat-error
+          >
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full">
+          <mat-label>Password</mat-label>
+          <input
+            matInput
+            [type]="hide ? 'password' : 'text'"
+            formControlName="password"
+          />
+          <button
+            type="button"
+            mat-icon-button
+            matSuffix
+            (click)="hide = !hide"
+          >
+            <mat-icon>{{ hide ? "visibility_off" : "visibility" }}</mat-icon>
+          </button>
+          <mat-error *ngIf="signupForm.get('password')?.hasError('required')"
+            >Password is required</mat-error
+          >
+          <mat-error *ngIf="signupForm.get('password')?.hasError('minlength')"
+            >Minimum 6 characters</mat-error
+          >
+        </mat-form-field>
+
+        <button
+          mat-raised-button
+          color="primary"
+          class="full cta"
+          [disabled]="loading || signupForm.invalid"
+        >
+          <ng-container *ngIf="!loading; else loadingTpl">Sign Up</ng-container>
+        </button>
+      </form>
+
+      <!-- LOGIN FORM -->
+      <form *ngIf="isLoginMode" [formGroup]="loginForm" (ngSubmit)="onLogin()">
+        <mat-form-field appearance="outline" class="full">
+          <mat-label>Email</mat-label>
+          <input
+            matInput
+            type="email"
+            formControlName="email"
+            placeholder="you@example.com"
+          />
+          <mat-error *ngIf="loginForm.get('email')?.hasError('required')"
+            >Email is required</mat-error
+          >
+          <mat-error *ngIf="loginForm.get('email')?.hasError('email')"
+            >Enter a valid email</mat-error
+          >
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full">
+          <mat-label>Password</mat-label>
+          <input
+            matInput
+            [type]="hide ? 'password' : 'text'"
+            formControlName="password"
+          />
+          <button
+            type="button"
+            mat-icon-button
+            matSuffix
+            (click)="hide = !hide"
+          >
+            <mat-icon>{{ hide ? "visibility_off" : "visibility" }}</mat-icon>
+          </button>
+          <mat-error *ngIf="loginForm.get('password')?.hasError('required')"
+            >Password is required</mat-error
+          >
+        </mat-form-field>
+
+        <button
+          mat-raised-button
+          color="primary"
+          class="full cta"
+          [disabled]="loading || loginForm.invalid"
+        >
+          <ng-container *ngIf="!loading; else loadingTpl">Login</ng-container>
+        </button>
+      </form>
+
+      <ng-template #loadingTpl>
+        <mat-progress-spinner
+          mode="indeterminate"
+          diameter="20"
+        ></mat-progress-spinner>
+      </ng-template>
+
+      <p class="muted">
+        <ng-container *ngIf="!isLoginMode">
+          Already have an account? <a href="#" (click)="toggleMode()">Login</a>
+        </ng-container>
+        <ng-container *ngIf="isLoginMode">
+          Don’t have an account? <a href="#" (click)="toggleMode()">Sign Up</a>
+        </ng-container>
+      </p>
+    </mat-card>
+  </section>
+</div>

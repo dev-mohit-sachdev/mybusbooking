@@ -1,0 +1,52 @@
+<h2 mat-dialog-title *ngIf="mode !== 'create'">
+  {{ mode | titlecase }} Maintenance
+</h2>
+<div mat-dialog-content>
+  <form [formGroup]="form">
+    <mat-form-field appearance="fill" style="width: 100%">
+      <mat-label>Bus</mat-label>
+      <mat-select formControlName="busId">
+        <mat-option *ngFor="let b of buses" [value]="b.id"
+          >{{ b.name }} ({{ b.id }})</mat-option
+        >
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" style="width: 100%">
+      <mat-label>Seat</mat-label>
+      <mat-select formControlName="seatNo">
+        <mat-option *ngFor="let s of seatsForBus" [value]="s.seatNo"
+          >{{ seatLabel(s) }} — {{ s.type }}</mat-option
+        >
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" style="width: 100%">
+      <mat-label>Reserved For</mat-label>
+      <mat-select formControlName="reservedFor">
+        <mat-option value="none">None</mat-option>
+        <mat-option value="female">Female / Ladies</mat-option>
+        <mat-option value="maintenance">Maintenance / Locked</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" style="width: 100%">
+      <mat-label>Blocked</mat-label>
+      <mat-select formControlName="blocked">
+        <mat-option [value]="false">No</mat-option>
+        <mat-option [value]="true">Yes</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </form>
+</div>
+<div mat-dialog-actions style="justify-content: flex-end">
+  <button mat-button (click)="close()">Close</button>
+  <button
+    mat-flat-button
+    color="primary"
+    (click)="save()"
+    *ngIf="mode !== 'view'"
+  >
+    Save
+  </button>
+</div>
